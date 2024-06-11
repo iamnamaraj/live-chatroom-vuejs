@@ -1,5 +1,7 @@
-import firebase from 'firebase/app'
-import 'firebase/firestore'
+// src/firebase/config.js
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore, serverTimestamp } from 'firebase/firestore';
 
 const firebaseConfig = {
     apiKey: "AIzaSyBs3uFHbcXjUvXom-9ure1FQxeOKmmDfME",
@@ -11,9 +13,10 @@ const firebaseConfig = {
     measurementId: "G-P01NE2PWQS"
   };
 
-  //init firebase
-  firebase.initializeApp(firebaseConfig)
-  const projectFirestore = firebase.firestore()
-  const timestamp = firebase.firestore.FieldValue.serverTimestamp
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const projectAuth = getAuth(app);
+const projectFirestore = getFirestore(app);
+const timestamp = serverTimestamp();
 
-  export { projectFirestore, timestamp }
+export { projectAuth, projectFirestore, timestamp };
