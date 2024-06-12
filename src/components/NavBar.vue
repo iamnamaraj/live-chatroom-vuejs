@@ -1,15 +1,32 @@
 <template>
-    <nav>
+    <nav v-if="user">
         <div>
-        <p>Hey there --- display name </p>
-        <p class="email">Currently logged in as --- email</p>
-    </div>
-    <button>Log out</button>
+            <p>Hey {{ user.displayName }} </p>
+            <p class="email">{{ user.email }}</p>
+        </div>
+        <button @click="handelLogout">Log out</button>
     </nav>
 </template>
 
 <script>
+import useLogout from '../composables/useLogout'
+import getUser from '../composables/getUser'
+
+
 export default {
+    setup(){
+        const { error, logout } = useLogout();
+        const { user } = getUser();
+
+        const handelLogout = async () =>{
+            await logout()
+            if(!error.value){
+                console.log('User logged out');
+            }
+        }
+
+        return { handelLogout, user }
+    }
 
 }
 </script>
@@ -28,7 +45,7 @@ export default {
         color: #444;
     }
     nav p.email {
-        font-size: 14px;
+        font-size: 12px;
         color: #999;
     }
 </style>
