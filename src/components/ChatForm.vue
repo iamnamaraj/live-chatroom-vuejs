@@ -5,6 +5,7 @@
             v-model="message"
             @keypress.enter.prevent="handelSubmit"
         ></textarea>
+        <div  v-if="error" class="error">{{ error }}</div>
     </form>
 
 </template>
@@ -12,11 +13,14 @@
 <script>
 import { ref } from 'vue'
 import getUser from '../composables/getUser'
+import useCollection from '../composables/useCollection'
 import { timestamp } from '../firebase/config';
 export default {
     setup(){
         const message = ref('');
         const { user } = getUser();
+        const { error, addDocument} = useCollection('messages');
+
 
         const handelSubmit = async () => {
             const chat = {
@@ -25,12 +29,15 @@ export default {
                 createdAt:timestamp
             }
 
-            console.log(chat)
+           await addDocument(chat)
+           if(!error.value){
             message.value = ''
+           }
+
         }
 
 
-        return {  message, handelSubmit}
+        return {  message, handelSubmit, error, addDocument}
     }
 }
 </script>
